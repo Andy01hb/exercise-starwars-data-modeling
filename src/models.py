@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import create_engine
 from eralchemy2 import render_er
@@ -29,21 +29,13 @@ class Characters(Base):
     homeworld_id = Column(Integer, ForeignKey('planets.id'))
     homeworld = relationship(Planets)
 
-class Favorite_planets(Base):
-    __tablename__ = 'favorite_planets'
+class Favorites(Base):
+    __tablename__ = 'favorites'
     id = Column(Integer, primary_key=True)
-    planet_id = Column(Integer, ForeignKey('planets.id'))
-    planet = relationship(Planets)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship(Users)
-
-class Favorite_characters(Base):
-    __tablename__ = 'favorite_characters'
-    id = Column(Integer, primary_key=True)
-    character_id = Column(Integer, ForeignKey('characters.id'))
-    character = relationship(Characters)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship(Users)
+    favorite_id = Column(Integer, nullable=False)  # ID del planeta o personaje
+    favorite_type = Column(Enum('planet', 'character', name='favorite_type'), nullable=False)  # Tipo de entidad
 
     def to_dict(self):
         return {}
